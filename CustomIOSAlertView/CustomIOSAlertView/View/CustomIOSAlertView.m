@@ -17,6 +17,9 @@ const static CGFloat kCustomIOSAlertViewDefaultButtonSpacerHeight = 1;
 const static CGFloat kCustomIOSAlertViewCornerRadius              = 7;
 const static CGFloat kCustomIOS7MotionEffectExtent                = 10.0;
 
+@interface CustomIOSAlertView ()
+- (void)closeTouched:(id)sender;
+@end
 @implementation CustomIOSAlertView
 
 CGFloat buttonHeight = 0;
@@ -133,7 +136,20 @@ CGFloat buttonSpacerHeight = 0;
 					 }
 					 completion:NULL
      ];
+    
+    //----add a close button on the upper-left
+    UIImage *close = [UIImage imageNamed:@"ico_close"];
+    UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [closeButton setImage:close forState:UIControlStateNormal];
+    [closeButton addTarget:self action:@selector(closeTouched:) forControlEvents:UIControlEventTouchUpInside];
+    [closeButton sizeToFit];
+    closeButton.center = CGPointMake(CGRectGetMaxX(dialogView.frame) - CGRectGetWidth(closeButton.frame) / 2, CGRectGetMinY(dialogView.frame) - CGRectGetHeight(closeButton.frame) / 2);
+    [self addSubview:closeButton];
+    
+}
 
+- (void)closeTouched:(id)sender{
+    [self close];
 }
 
 // Button has been touched
